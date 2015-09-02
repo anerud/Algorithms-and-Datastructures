@@ -1,6 +1,7 @@
 package dataStructures.collections;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PriorityQueueHeap<T extends Comparable<T>> {
 	
@@ -121,4 +122,14 @@ public class PriorityQueueHeap<T extends Comparable<T>> {
 		return sb.toString();
 	}
 	
+	public static <T extends Comparable<T>> void sort(List<T> l) {
+		PriorityQueueHeap<T> q = new PriorityQueueHeap<T>(l.size());
+		for(T t : l) {
+			q.insert(t);
+		}
+		l.clear();
+		while(q.hasNext()) {
+			l.add(q.poll());
+		}
+	}
 }
