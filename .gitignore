@@ -47,3 +47,6 @@ Temporary Items
 bin/
 *.project
 *.classpath
+
+# IDE files
+*.iml

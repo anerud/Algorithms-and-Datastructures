@@ -1,9 +1,10 @@
 package util;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CombinationGenerator {
+public class CombinationGenerator implements Iterator<List<Integer>> {
 	
 		private int n;
 		private int k;
@@ -11,7 +12,7 @@ public class CombinationGenerator {
 		private boolean hasNext;
 		
 		/**
-		 * Creates an object where one can iterate through all k,...,n-1 size combinations of integers 0,...,n-1.
+		 * Creates an object where one can iterate through all k size combinations of integers 0,...,n-1.
 		 * @param n the number of integers in the combination
 		 * @param k the size of smallest subset
 		 */
@@ -21,7 +22,7 @@ public class CombinationGenerator {
 			reset();
 		}
 		
-		public void reset(){
+		private void reset(){
 			hasNext = true;
 			pointers = new int[k];
 			for(int i = 0; i < k; i++) {
@@ -40,31 +41,31 @@ public class CombinationGenerator {
 		 */
 		public List<Integer> next(){
 			//Construct current combination for return at the end
-			List<Integer> comb = new LinkedList<Integer>();
-			for(int c : pointers) {
-				comb.add(c);
+			List<Integer> nextCombination = new LinkedList<>();
+			for (Integer i : pointers) {
+				nextCombination.add(i);
 			}
-			
+
 			//Find out the leftmost carry
-			int carryPos = k-1;
-			while(carryPos >= 0 && pointers[carryPos] >= n-(k-carryPos)) {
-				carryPos--;
+			int pointerWithCarry = k-1;
+			while(pointerWithCarry >= 0 && pointers[pointerWithCarry] >= n-(k-pointerWithCarry)) {
+				pointerWithCarry--;
 			}
 			
 			//The leftmost pointer has reached max pos --> There are no more combinations
-			if(carryPos < 0) {
+			if(pointerWithCarry < 0) {
 				hasNext = false;
-				return comb;
+				return nextCombination;
 			}
 			
 			//Given the leftmost carry, increment it and reset the pointers to the right of it
-			pointers[carryPos]++;
-			for(int i = carryPos + 1; i < k; i++) {
+			pointers[pointerWithCarry]++;
+			for(int i = pointerWithCarry + 1; i < k; i++) {
 				pointers[i] = pointers[i-1]+1;
 			}
 			
 			//return current comb
-			return comb;
+			return nextCombination;
 		}
 		
 		/**
